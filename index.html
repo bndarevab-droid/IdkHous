@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IdkHous — Главная</title>
-    <meta name="description" content="IdkHous — сообщество.">
+    <title>IdkHous — Форум</title>
+    <meta name="description" content="IdkHous — форум сообщества. Правила и система повышения.">
     <meta name="theme-color" content="#0a0a0f">
     <style>
         :root {
@@ -41,7 +41,6 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         html { scroll-behavior: smooth; scroll-padding-top: var(--nav-height); }
 
         body {
@@ -119,6 +118,7 @@
         .hero-content { max-width: 700px; }
         .hero-title { font-size: clamp(2.8rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 16px; background: linear-gradient(135deg, #e8e8f0 0%, #c4b5fd 40%, #a78bfa 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-description { font-size: 1.15rem; color: var(--text-secondary); max-width: 480px; margin: 0 auto 32px; line-height: 1.7; }
+        .hero-forum-badge { display: inline-block; padding: 6px 16px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 20px; color: var(--accent); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
 
         .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 10px; font-weight: 600; font-size: 0.95rem; text-decoration: none; cursor: pointer; transition: var(--transition); border: none; white-space: nowrap; }
         .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 20px var(--accent-glow); }
@@ -149,6 +149,15 @@
         .rule-punishment.low { background: var(--blue-soft); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
         .rule-punishment.mild { background: rgba(99,102,241,0.12); color: #818cf8; border: 1px solid rgba(99,102,241,0.2); }
         .rule-punishment.raid { background: rgba(220, 38, 38, 0.25); color: #fca5a5; border: 1px solid rgba(220, 38, 38, 0.4); font-size: 0.9rem; padding: 8px 16px; letter-spacing: 0.05em; text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+        .copy-btn {
+            position: absolute; top: 10px; right: 12px;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            color: var(--text-muted); font-size: 0.7rem; padding: 3px 8px;
+            border-radius: 4px; cursor: pointer; transition: var(--transition);
+            opacity: 0; pointer-events: none;
+        }
+        .rule-card:hover .copy-btn { opacity: 1; pointer-events: all; }
+        .copy-btn:hover { background: var(--accent-soft); color: var(--text-primary); }
 
         .promo-wrapper {
             background: var(--bg-card); border: 1px solid var(--border);
@@ -175,6 +184,25 @@
         .tier-level { font-size: 1.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 4px; }
         .tier-name { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
 
+        .contact-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-xl); padding: 32px;
+            max-width: 600px; margin: 0 auto;
+            display: flex; flex-direction: column; gap: 24px;
+        }
+        .contact-group h3 {
+            font-size: 1.2rem; font-weight: 700; margin-bottom: 12px;
+            color: var(--text-primary); border-bottom: 1px solid var(--border);
+            padding-bottom: 6px;
+        }
+        .contact-item {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 8px; font-size: 0.95rem;
+        }
+        .contact-item span:first-child { color: var(--text-secondary); width: 120px; }
+        .contact-item a { color: #60a5fa; text-decoration: none; }
+        .contact-item a:hover { text-decoration: underline; }
+
         .modal-overlay {
             position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.7);
             backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center;
@@ -190,17 +218,10 @@
             position: absolute; top: 12px; right: 16px; background: none;
             border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;
         }
-        .modal-content h3 {
-            font-size: 1.5rem; margin-bottom: 16px; color: var(--text-primary);
-        }
-        .modal-content p {
-            color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap;
-        }
+        .modal-content h3 { font-size: 1.5rem; margin-bottom: 16px; color: var(--text-primary); }
+        .modal-content p { color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap; }
 
-        .footer {
-            text-align: center; padding: 40px 24px; color: var(--text-muted);
-            font-size: 0.85rem; border-top: 1px solid var(--border); position: relative; z-index: 1;
-        }
+        .footer { text-align: center; padding: 40px 24px; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border); position: relative; z-index: 1; }
         .footer span { color: var(--accent); font-weight: 600; }
 
         @media (max-width: 768px) {
@@ -236,7 +257,7 @@
 </head>
 <body>
     <nav class="nav" id="navbar">
-        <a href="#hero" class="nav-logo" aria-label="IdkHous главная">
+        <a href="#hero" class="nav-logo" aria-label="IdkHous форум">
             <div class="nav-logo-icon">I</div>
             IdkHous
         </a>
@@ -244,6 +265,7 @@
             <li><a href="#hero" class="active" data-section="hero">Главная</a></li>
             <li><a href="#rules" data-section="rules">Правила</a></li>
             <li><a href="#promotion" data-section="promotion">Повышение</a></li>
+            <li><a href="#contact" data-section="contact">Контакты</a></li>
         </ul>
         <button class="hamburger" id="hamburger" aria-label="Меню" aria-expanded="false">
             <span></span><span></span><span></span>
@@ -254,15 +276,18 @@
         <a href="#hero" class="active" data-section="hero">Главная</a>
         <a href="#rules" data-section="rules">Правила</a>
         <a href="#promotion" data-section="promotion">Повышение</a>
+        <a href="#contact" data-section="contact">Контакты</a>
     </div>
 
     <section class="section section-hero" id="hero">
         <div class="hero-content">
+            <div class="hero-forum-badge">Форум</div>
             <h1 class="hero-title">IdkHous</h1>
             <p class="hero-description">Присоединяйся, общайся, играй, развивайся.</p>
             <div class="btn-group">
                 <a href="#rules" class="btn btn-primary">Правила хауса</a>
                 <a href="#promotion" class="btn btn-outline">Система повышения</a>
+                <a href="#contact" class="btn btn-outline">Связаться с нами</a>
             </div>
             <div class="scroll-indicator" aria-hidden="true">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -274,26 +299,45 @@
         <span class="section-label">Обязательно к ознакомлению</span>
         <h2 class="section-title">Правила хауса</h2>
         <p class="section-subtitle">Нарушение любого пункта ведёт к наказанию. Ознакомьтесь внимательно — незнание правил не освобождает от ответственности.</p>
-        <div class="rules-grid">
-            <div class="rule-card severity-critical"><span class="rule-number">Пункт 1.1</span><p class="rule-description">Doxing / swatting участников</p><span class="rule-punishment critical">Permanent Ban</span></div>
-            <div class="rule-card severity-high"><span class="rule-number">Пункт 1.2</span><p class="rule-description">GIF / фото / видео реалистичное с NSFW характером или с любым насилием</p><span class="rule-punishment high">Mute 2–6ч + Warn / Ban 1д + Warn</span></div>
-            <div class="rule-card severity-low"><span class="rule-number">Пункт 1.3</span><p class="rule-description">Флуд / спам</p><span class="rule-punishment low">Mute 5–30мин / Warn</span></div>
-            <div class="rule-card severity-high"><span class="rule-number">Пункт 1.4</span><p class="rule-description">Оскорбление родни</p><span class="rule-punishment high">Mute 30–60мин + Warn / Ban 1–3д</span></div>
-            <div class="rule-card severity-medium"><span class="rule-number">Пункт 1.5</span><p class="rule-description">Разжигание межнационального конфликта</p><span class="rule-punishment medium">Mute 30–90мин + Warn / Ban 1д</span></div>
-            <div class="rule-card severity-medium"><span class="rule-number">Пункт 1.6</span><p class="rule-description">Несанкционированная реклама</p><span class="rule-punishment medium">Mute 1–6ч + Warn</span></div>
-            <div class="rule-card severity-mild"><span class="rule-number">Пункт 1.7</span><p class="rule-description">Оскорбление религии</p><span class="rule-punishment mild">Mute 5–15мин</span></div>
-            <div class="rule-card severity-raid"><span class="rule-number">Пункт 1.8</span><p class="rule-description">Рейд чата/слив адм</p><span class="rule-punishment raid">Черный Список</span></div>
-            <div class="rule-card severity-critical"><span class="rule-number">Пункт 1.9</span><p class="rule-description">Решение администрации</p><span class="rule-punishment critical">По решению администрации</span></div>
-       <div class="rule-card severity-mild"><span class="rule-number">Пункт 1.7</span><p class="rule-description">Выдача себя за администратора</p><span class="rule-punishment mild">Устное предупрежние в последующем Mute 5–15мин</span></div>
-        </div>
+        <div class="rules-grid" id="rulesGrid"></div>
     </section>
 
     <section class="section" id="promotion">
         <span class="section-label">Развитие</span>
         <h2 class="section-title">Система повышения</h2>
-        <p class="section-subtitle">Нажми на ранг, чтобы узнать требования.</p>
+        <p class="section-subtitle">Нажми на уровень, чтобы узнать требования.</p>
         <div class="promo-wrapper">
             <div class="promo-tiers" id="tiersContainer"></div>
+        </div>
+    </section>
+
+    <section class="section" id="contact">
+        <span class="section-label">Обратная связь</span>
+        <h2 class="section-title">Связаться с нами</h2>
+        <p class="section-subtitle">Наши контакты для связи.</p>
+        <div class="contact-card">
+            <div class="contact-group">
+                <h3>Telegram</h3>
+                <div class="contact-item">
+                    <span>Лидер:</span>
+                    <a href="https://t.me/kamiplayrbxYt" target="_blank" rel="noopener">kamiplayrbxYt</a>
+                </div>
+                <div class="contact-item">
+                    <span>Заместитель:</span>
+                    <a href="https://t.me/aleksuy90_strim" target="_blank" rel="noopener">aleksuy90_strim</a>
+                </div>
+            </div>
+            <div class="contact-group">
+                <h3>Discord</h3>
+                <div class="contact-item">
+                    <span>Лидер:</span>
+                    <a href="https://discord.gg/jGZrxRuR8" target="_blank" rel="noopener">ilya_otnim</a>
+                </div>
+                <div class="contact-item">
+                    <span>Заместитель:</span>
+                    <span style="color: var(--text-primary);">aleksei071969</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -305,15 +349,16 @@
     </div>
 
     <footer class="footer">
-        <p>© 2026 <span>IdkHous</span>. Все права защищены. Правила могут обновляться.</p>
+        <p>© 2026 <span>IdkHous</span> — форум сообщества. Правила могут обновляться.</p>
     </footer>
 
     <script>
         (function() {
+            // Навигация
             const navbar = document.getElementById('navbar');
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobileMenu');
-            const navLinks = document.querySelectorAll('#navLinks a, #mobileMenu a');
+            const allNavLinks = document.querySelectorAll('#navLinks a, #mobileMenu a');
 
             function toggleMenu() { mobileMenu.classList.contains('open') ? closeMenu() : openMenu(); }
             function openMenu() { mobileMenu.classList.add('open'); hamburger.classList.add('open'); hamburger.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; }
@@ -333,16 +378,86 @@
                     const top = sec.offsetTop - navHeight - 80;
                     if (scrollY >= top && scrollY < top + sec.offsetHeight) current = sec.id;
                 });
-                navLinks.forEach(a => a.classList.toggle('active', a.dataset.section === current));
+                allNavLinks.forEach(a => a.classList.toggle('active', a.dataset.section === current));
             }
             window.addEventListener('scroll', updateActiveLink, { passive: true });
             window.addEventListener('load', updateActiveLink);
 
+            // Правила (с кнопками Copy)
+            const rulesData = [
+                { number: 'Пункт 1.1', desc: 'Doxing / swatting участников', punishment: 'Permanent Ban', severity: 'critical' },
+                { number: 'Пункт 1.2', desc: 'GIF / фото / видео реалистичное с NSFW характером или с любым насилием', punishment: 'Mute 2–6ч + Warn / Ban 1д + Warn', severity: 'high' },
+                { number: 'Пункт 1.3', desc: 'Флуд / спам', punishment: 'Mute 5–30мин / Warn', severity: 'low' },
+                { number: 'Пункт 1.4', desc: 'Оскорбление родни', punishment: 'Mute 30–60мин + Warn / Ban 1–3д', severity: 'high' },
+                { number: 'Пункт 1.5', desc: 'Разжигание межнационального конфликта', punishment: 'Mute 30–90мин + Warn / Ban 1д', severity: 'medium' },
+                { number: 'Пункт 1.6', desc: 'Несанкционированная реклама', punishment: 'Mute 1–6ч + Warn', severity: 'medium' },
+                { number: 'Пункт 1.7', desc: 'Оскорбление религии', punishment: 'Mute 5–15мин', severity: 'mild' },
+                { number: 'Пункт 1.8', desc: 'Рейд чата/слив адм', punishment: 'Черный список', severity: 'raid' },
+                { number: 'Пункт 1.9', desc: 'Решение администрации', punishment: 'По решению администрации', severity: 'critical' },
+                { number: 'Пункт 2.0', desc: 'Выдача себя за администратора', punishment: 'Mute 5-15m', severity: 'medium' }
+            ];
+
+            const rulesGrid = document.getElementById('rulesGrid');
+            function renderRules() {
+                rulesGrid.innerHTML = '';
+                rulesData.forEach(rule => {
+                    const card = document.createElement('div');
+                    card.className = `rule-card severity-${rule.severity}`;
+                    card.innerHTML = `
+                        <span class="rule-number">${rule.number}</span>
+                        <p class="rule-description">${rule.desc}</p>
+                        <span class="rule-punishment ${rule.severity}">${rule.punishment}</span>
+                        <button class="copy-btn" data-text="${rule.number}: ${rule.desc} — ${rule.punishment}">Копировать</button>
+                    `;
+                    rulesGrid.appendChild(card);
+                });
+
+                document.querySelectorAll('.copy-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const text = btn.dataset.text;
+                        copyToClipboard(text, btn);
+                    });
+                });
+            }
+
+            function copyToClipboard(text, button) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        button.textContent = 'Скопировано';
+                        setTimeout(() => { button.textContent = 'Копировать'; }, 1500);
+                    }).catch(() => {
+                        fallbackCopy(text, button);
+                    });
+                } else {
+                    fallbackCopy(text, button);
+                }
+            }
+
+            function fallbackCopy(text, button) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.left = '-9999px';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    button.textContent = 'Скопировано';
+                    setTimeout(() => { button.textContent = 'Копировать'; }, 1500);
+                } catch (err) {
+                    button.textContent = 'Ошибка';
+                    setTimeout(() => { button.textContent = 'Копировать'; }, 1500);
+                }
+                document.body.removeChild(textarea);
+            }
+
+            // Система повышения
             const tiersData = [
                 { level: 'Lv.1', name: 'Участник', clickable: false, requirements: null },
                 { level: 'Lv.2', name: 'Мл. модер', clickable: true, requirements: '• Быть ознакомленным с правилами хауса\n• Быть в хаусе минимум 1 день (возможны исключения)\n• Быть ознакомленным с командами GroupHelp (бота)' },
                 { level: 'Lv.3', name: 'Ст. модер', clickable: true, requirements: '• Иметь хорошую репутацию\n• Получить одобрение от куратора модераторов на повышение\n• Быть в хаусе около 3 дней' },
-                { level: 'Lv.4', name: 'Куратор модеров', clickable: true, requirements: '• Получить одобрение ЗС или ЛД\n• Быть в хаусе около 3 дней' },
+                { level: 'Lv.4', name: 'Куратор модеров', clickable: true, requirements: '• Получить одобрение ЗС или ЛД\n• Быть в хаусе около 3 дней\n• Быть активным в чате и активно посещать мероприятия и коллабы\n• Сдать тест и практику на команды Group Help' },
                 { level: 'Lv.5', name: 'Администратор', clickable: true, requirements: '• Получить одобрение ЗС РФ или ЛД\n• Быть в хаусе 5 дней\n• Проявлять активность' }
             ];
 
@@ -366,13 +481,15 @@
                 promoModalContent.innerHTML = `<h3>${tier.name} — требования</h3><p>${tier.requirements.replace(/\n/g, '<br>')}</p>`;
                 promoModal.classList.add('open');
             }
-
             function closePromoModalFunc() { promoModal.classList.remove('open'); }
             closePromoModal.addEventListener('click', closePromoModalFunc);
             promoModal.addEventListener('click', e => { if (e.target === promoModal) closePromoModalFunc(); });
 
+            // Инициализация
+            renderRules();
             renderTiers();
 
+            // Анимация появления
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry, i) => {
                     if (entry.isIntersecting) {
