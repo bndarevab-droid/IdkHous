@@ -233,9 +233,10 @@
             .rules-grid { grid-template-columns: 1fr; gap: 10px; }
             .rule-card { padding: 16px 18px; }
             .promo-wrapper { padding: 28px 18px; }
-            .promo-tiers { gap: 8px; }
-            .tier-card { min-width: 70px; padding: 14px 10px; max-width: 140px; }
-            .tier-level { font-size: 1.3rem; }
+            .promo-tiers { gap: 6px; flex-wrap: nowrap; }
+            .tier-card { min-width: 0; padding: 12px 6px; max-width: none; flex: 1 1 0; }
+            .tier-level { font-size: 1.2rem; }
+            .tier-name { font-size: 0.65rem; }
             .hero-title { font-size: 2.4rem; }
             .hero-description { font-size: 1rem; }
             .btn { padding: 11px 22px; font-size: 0.9rem; }
@@ -251,7 +252,10 @@
             .rule-punishment { font-size: 0.76rem; padding: 5px 10px; }
             .hero-title { font-size: 2rem; }
             .section-title { font-size: 1.5rem; }
-            .tier-card { min-width: 60px; max-width: 100px; padding: 12px 8px; }
+            .promo-tiers { gap: 4px; }
+            .tier-card { padding: 10px 4px; }
+            .tier-level { font-size: 1rem; }
+            .tier-name { font-size: 0.6rem; }
         }
     </style>
 </head>
