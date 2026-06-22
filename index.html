@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IdkHous — Форум</title>
-    <meta name="description" content="IdkHous — форум сообщества. Правила и система повышения.">
+    <meta name="description" content="IdkHous — форум сообщества. Правила и система модерации.">
     <meta name="theme-color" content="#0a0a0f">
     <style>
         :root {
@@ -159,18 +159,20 @@
         .rule-card:hover .copy-btn { opacity: 1; pointer-events: all; }
         .copy-btn:hover { background: var(--accent-soft); color: var(--text-primary); }
 
-        .promo-wrapper {
+        /* Секция модерации с оверлеем */
+        .moderation-wrapper {
             background: var(--bg-card); border: 1px solid var(--border);
             border-radius: var(--radius-xl); padding: 40px 32px; text-align: center;
             position: relative; overflow: hidden;
         }
-        .promo-wrapper::after {
+        .moderation-wrapper::after {
             content: ''; position: absolute; top: -40px; right: -40px;
             width: 150px; height: 150px; background: var(--accent);
             border-radius: 50%; filter: blur(70px); opacity: 0.08; pointer-events: none;
         }
-        .promo-tiers {
+        .tiers-container {
             display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 28px;
+            position: relative;
         }
         .tier-card {
             background: var(--bg-surface); border: 1px solid var(--border);
@@ -183,6 +185,32 @@
         .tier-card.clickable:hover { background: var(--bg-card-hover); transform: translateY(-2px); }
         .tier-level { font-size: 1.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 4px; }
         .tier-name { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+
+        /* Оверлей "Набор закрыт" */
+        .tiers-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 10, 15, 0.65);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-xl);
+            z-index: 10;
+            pointer-events: all;
+        }
+        .overlay-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(0,0,0,0.8);
+            letter-spacing: 0.05em;
+            background: rgba(239, 68, 68, 0.2);
+            padding: 12px 32px;
+            border-radius: 30px;
+            border: 1px solid var(--red);
+        }
 
         .contact-card {
             background: var(--bg-card); border: 1px solid var(--border);
@@ -232,11 +260,12 @@
             .section-hero { min-height: 90vh; padding-top: var(--nav-height); }
             .rules-grid { grid-template-columns: 1fr; gap: 10px; }
             .rule-card { padding: 16px 18px; }
-            .promo-wrapper { padding: 28px 18px; }
-            .promo-tiers { gap: 6px; flex-wrap: nowrap; }
+            .moderation-wrapper { padding: 28px 18px; }
+            .tiers-container { gap: 6px; flex-wrap: nowrap; }
             .tier-card { min-width: 0; padding: 12px 6px; max-width: none; flex: 1 1 0; }
             .tier-level { font-size: 1.2rem; }
             .tier-name { font-size: 0.65rem; word-break: break-word; overflow-wrap: break-word; }
+            .overlay-text { font-size: 1.4rem; padding: 8px 24px; }
             .hero-title { font-size: 2.4rem; }
             .hero-description { font-size: 1rem; }
             .btn { padding: 11px 22px; font-size: 0.9rem; }
@@ -252,10 +281,11 @@
             .rule-punishment { font-size: 0.76rem; padding: 5px 10px; }
             .hero-title { font-size: 2rem; }
             .section-title { font-size: 1.5rem; }
-            .promo-tiers { gap: 4px; }
+            .tiers-container { gap: 4px; }
             .tier-card { padding: 10px 4px; }
             .tier-level { font-size: 1rem; }
             .tier-name { font-size: 0.55rem; word-break: break-word; overflow-wrap: break-word; }
+            .overlay-text { font-size: 1.2rem; padding: 6px 18px; }
         }
     </style>
 </head>
@@ -268,7 +298,7 @@
         <ul class="nav-links" id="navLinks">
             <li><a href="#hero" class="active" data-section="hero">Главная</a></li>
             <li><a href="#rules" data-section="rules">Правила</a></li>
-            <li><a href="#promotion" data-section="promotion">Повышение</a></li>
+            <li><a href="#moderation" data-section="moderation">Модерация</a></li>
             <li><a href="#contact" data-section="contact">Контакты</a></li>
         </ul>
         <button class="hamburger" id="hamburger" aria-label="Меню" aria-expanded="false">
@@ -279,7 +309,7 @@
     <div class="mobile-menu" id="mobileMenu">
         <a href="#hero" class="active" data-section="hero">Главная</a>
         <a href="#rules" data-section="rules">Правила</a>
-        <a href="#promotion" data-section="promotion">Повышение</a>
+        <a href="#moderation" data-section="moderation">Модерация</a>
         <a href="#contact" data-section="contact">Контакты</a>
     </div>
 
@@ -290,7 +320,7 @@
             <p class="hero-description">Присоединяйся, общайся, играй, развивайся.</p>
             <div class="btn-group">
                 <a href="#rules" class="btn btn-primary">Правила хауса</a>
-                <a href="#promotion" class="btn btn-outline">Система повышения</a>
+                <a href="#moderation" class="btn btn-outline">Система модерации</a>
                 <a href="#contact" class="btn btn-outline">Связаться с нами</a>
             </div>
             <div class="scroll-indicator" aria-hidden="true">
@@ -306,12 +336,17 @@
         <div class="rules-grid" id="rulesGrid"></div>
     </section>
 
-    <section class="section" id="promotion">
-        <span class="section-label">Развитие</span>
-        <h2 class="section-title">Система повышения</h2>
-        <p class="section-subtitle">Нажми на уровень, чтобы узнать требования.</p>
-        <div class="promo-wrapper">
-            <div class="promo-tiers" id="tiersContainer"></div>
+    <section class="section" id="moderation">
+        <span class="section-label">Модерация</span>
+        <h2 class="section-title">Система модерации</h2>
+        <p class="section-subtitle">Набор закрыт. Следите за обновлениями.</p>
+        <div class="moderation-wrapper">
+            <div class="tiers-container" id="tiersContainer">
+                <!-- Карточки генерируются JS -->
+            </div>
+            <div class="tiers-overlay">
+                <span class="overlay-text">Набор закрыт</span>
+            </div>
         </div>
     </section>
 
@@ -467,7 +502,7 @@
                 document.body.removeChild(textarea);
             }
 
-            // Система повышения
+            // Система модерации (только отображение уровней, клики отключены оверлеем)
             const tiersData = [
                 { level: 'Lv.1', name: 'Участник', clickable: false, requirements: null },
                 { level: 'Lv.2', name: 'Мл. модер', clickable: true, requirements: '• Быть ознакомленным с правилами хауса\n• Быть в хаусе минимум 1 день (возможны исключения)\n• Быть ознакомленным с командами GroupHelp (бота)' },
@@ -477,28 +512,22 @@
             ];
 
             const tiersContainer = document.getElementById('tiersContainer');
-            const promoModal = document.getElementById('promoModal');
-            const closePromoModal = document.getElementById('closePromoModal');
-            const promoModalContent = document.getElementById('promoModalContent');
-
             function renderTiers() {
                 tiersContainer.innerHTML = '';
                 tiersData.forEach(tier => {
                     const card = document.createElement('div');
-                    card.className = `tier-card ${tier.clickable ? 'clickable' : ''}`;
+                    card.className = `tier-card`;
                     card.innerHTML = `<div class="tier-level">${tier.level}</div><div class="tier-name">${tier.name}</div>`;
-                    if (tier.clickable) card.addEventListener('click', () => openPromoModal(tier));
+                    // Клики не вешаем – оверлей всё равно перехватывает
                     tiersContainer.appendChild(card);
                 });
             }
 
-            function openPromoModal(tier) {
-                promoModalContent.innerHTML = `<h3>${tier.name} — требования</h3><p>${tier.requirements.replace(/\n/g, '<br>')}</p>`;
-                promoModal.classList.add('open');
-            }
-            function closePromoModalFunc() { promoModal.classList.remove('open'); }
-            closePromoModal.addEventListener('click', closePromoModalFunc);
-            promoModal.addEventListener('click', e => { if (e.target === promoModal) closePromoModalFunc(); });
+            // Модальное окно (оставлено, но не вызывается, так как клики заблокированы)
+            const promoModal = document.getElementById('promoModal');
+            const closePromoModal = document.getElementById('closePromoModal');
+            closePromoModal.addEventListener('click', () => promoModal.classList.remove('open'));
+            promoModal.addEventListener('click', e => { if (e.target === promoModal) promoModal.classList.remove('open'); });
 
             // Инициализация
             renderRules();
@@ -515,8 +544,8 @@
                 });
             }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
             document.querySelectorAll('.rule-card').forEach(c => { c.style.opacity='0'; c.style.transform='translateY(20px)'; observer.observe(c); });
-            const pw = document.querySelector('.promo-wrapper');
-            if(pw) { pw.style.opacity='0'; pw.style.transform='translateY(20px)'; new IntersectionObserver(e=>{if(e[0].isIntersecting){pw.style.opacity='1'; pw.style.transform='translateY(0)'; pw.style.transition='opacity 0.5s ease, transform 0.5s ease';}},{threshold:0.1}).observe(pw); }
+            const mw = document.querySelector('.moderation-wrapper');
+            if(mw) { mw.style.opacity='0'; mw.style.transform='translateY(20px)'; new IntersectionObserver(e=>{if(e[0].isIntersecting){mw.style.opacity='1'; mw.style.transform='translateY(0)'; mw.style.transition='opacity 0.5s ease, transform 0.5s ease';}},{threshold:0.1}).observe(mw); }
         })();
     </script>
 </body>
